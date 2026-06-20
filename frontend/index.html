@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dermatologist AI Assistant</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<nav>
+  <h2>AI DERMATOLOGIST ASSISTANT</h2>
+  <div style="position:relative;">
+    <a href="index.html">Home</a>
+    <a href="#" onclick="toggleLanguageMenu()">Language</a>
+    <a href="about.html">About</a>
+    <a href="faq.html">FAQ</a>
+
+    <!-- Language Dropdown -->
+    <div id="languageMenu" style="
+      display:none;
+      position:absolute;
+      top:30px;
+      background:white;
+      padding:10px;
+      border-radius:8px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.2);
+      z-index:10;
+    ">
+      <a href="#" onclick="setLanguage('en')">English</a><br>
+      <a href="#" onclick="setLanguage('hi')">हिंदी</a>
+    </div>
+  </div>
+</nav>
+
+<section style="text-align:center; padding:90px 20px;">
+
+  <!-- DERMASCAN -->
+  <h1 id="title" style="
+    font-family:'Anton', sans-serif;
+    font-size:130px;
+    font-weight:900;
+    color:#d63384;
+    margin:0;
+    letter-spacing:6px;
+    text-transform:uppercase;
+  ">
+    DERMASCAN
+  </h1>
+
+  <!-- TAGLINE -->
+  <p id="tagline" style="
+    margin-top:-10px;
+    font-size:22px;
+    font-weight:500;
+    color:#555;
+    letter-spacing:1px;
+  ">
+    Understand your skin using Artificial Intelligence
+  </p>
+
+  <br><br>
+
+  <img 
+    src="360_F_301347734_BNlV5crnfo0AYkZUXxgOC6t2qFLVLs9N.jpg" 
+    width="100%" 
+    style="border-radius:20px;"
+  >
+
+</section>
+
+<section>
+  <h2 style="color:var(--pink)">Features</h2>
+  <br>
+
+  <div class="cards">
+
+    <div class="card">
+      <img src="_118559995_03_derm-photo.png">
+      <h3 id="f1">Skin Disease Detection</h3>
+      <p id="f1d">Upload skin image for AI analysis.</p>
+      <button class="btn" onclick="goToResult()">Generate</button>
+    </div>
+
+    <div class="card">
+      <img src="personalized-skincare-vector-illustration-showing-diverse-team-scientists-analyzing-data-includes-microscope-test-tubes-422617976.webp">
+      <h3 id="f2">Personalized Skin Routine</h3>
+      <p id="f2d">AI-generated skincare routine.</p>
+      <button class="btn" onclick="openPopup('routine')">Generate</button>
+    </div>
+
+    <div class="card">
+      <img src="dermatologist-consulting-patient-skin-conditions-tablet-dermatologist-explaining-skin-types-conditions-to-patient-434099517.webp">
+      <h3 id="f3">Ingredient Analyzer</h3>
+      <p id="f3d">Check safety & suitability of products.</p>
+      <button class="btn" onclick="openPopup('analyzer')">Analyze</button>
+    </div>
+
+    <div class="card">
+      <img src="docters-hand-uses-magnifying-glass-600nw-2170356663.webp">
+      <h3 id="f4">Dermoscopy Report Explainer</h3>
+      <p id="f4d">Medical reports explained simply.</p>
+      <button class="btn" onclick="openPopup('dermoscopy')">Upload Report</button>
+    </div>
+
+  </div>
+</section>
+
+<footer id="footerText">
+⚠️ This app does not replace a certified dermatologist.
+</footer>
+
+<!-- 🔹 POPUP (UNCHANGED) -->
+<div id="popup" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.6);
+  justify-content:center;
+  align-items:center;
+">
+  <div style="
+    background:#fff;
+    padding:25px;
+    width:90%;
+    max-width:500px;
+    border-radius:15px;
+  ">
+    <h3 id="popupTitle"></h3>
+
+    <textarea
+      id="popupInput"
+      placeholder="Type here (e.g. Oily skin with acne)"
+      style="width:100%; height:120px; padding:10px;"
+    ></textarea>
+
+    <br><br>
+
+    <button class="btn" onclick="submitPopup()">Submit</button>
+    <button class="btn" onclick="closePopup()">Close</button>
+
+    <p id="popupResult" style="margin-top:15px;"></p>
+  </div>
+</div>
+
+<script>
+function toggleLanguageMenu() {
+  const menu = document.getElementById("languageMenu");
+  menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+const translations = {
+  en: {
+    title: "DERMASCAN",
+    tagline: "Understand your skin using Artificial Intelligence",
+    f1: "Skin Disease Detection",
+    f1d: "Upload skin image for AI analysis.",
+    f2: "Personalized Skin Routine",
+    f2d: "AI-generated skincare routine.",
+    f3: "Ingredient Analyzer",
+    f3d: "Check safety & suitability of products.",
+    f4: "Dermoscopy Report Explainer",
+    f4d: "Medical reports explained simply.",
+    footerText: "⚠️ This app does not replace a certified dermatologist."
+  },
+  hi: {
+    title: "डर्मास्कैन",
+    tagline: "कृत्रिम बुद्धिमत्ता द्वारा अपनी त्वचा को समझें",
+    f1: "त्वचा रोग पहचान",
+    f1d: "AI द्वारा त्वचा की छवि का विश्लेषण करें।",
+    f2: "व्यक्तिगत स्किन केयर रूटीन",
+    f2d: "AI द्वारा बनाया गया स्किन केयर रूटीन।",
+    f3: "इंग्रेडिएंट विश्लेषक",
+    f3d: "उत्पादों की सुरक्षा और उपयुक्तता जांचें।",
+    f4: "डर्मोस्कोपी रिपोर्ट व्याख्या",
+    f4d: "मेडिकल रिपोर्ट को सरल भाषा में समझें।",
+    footerText: "⚠️ यह ऐप प्रमाणित त्वचा विशेषज्ञ का विकल्प नहीं है।"
+  }
+};
+
+function setLanguage(lang) {
+  for (let key in translations[lang]) {
+    document.getElementById(key).innerText = translations[lang][key];
+  }
+  document.getElementById("languageMenu").style.display = "none";
+}
+</script>
+
+<script>
+let currentMode = "";
+
+function openPopup(mode) {
+  currentMode = mode;
+  document.getElementById("popup").style.display = "flex";
+
+  const input = document.getElementById("popupInput");
+
+  if (mode === "routine") {
+    document.getElementById("popupTitle").innerText = "AI Skin Care Routine Maker";
+    input.placeholder = "Example: Oily skin with acne";
+  }
+
+  if (mode === "analyzer") {
+    document.getElementById("popupTitle").innerText = "Ingredient / Product Analyzer";
+    input.placeholder = "Example: Salicylic Acid, Niacinamide";
+  }
+
+  if (mode === "dermoscopy") {
+    document.getElementById("popupTitle").innerText = "Dermoscopy Report Explainer";
+    input.placeholder = "Paste your dermoscopy report findings here";
+  }
+
+  input.value = "";
+  document.getElementById("popupResult").innerText = "";
+}
+
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
+
+async function submitPopup() {
+  const input = document.getElementById("popupInput").value;
+  const result = document.getElementById("popupResult");
+
+  if (!input) {
+    alert("Please enter something");
+    return;
+  }
+
+  result.innerText = "Thinking... 🤔";
+
+  let body = { mode: currentMode };
+
+  if (currentMode === "routine") {
+    body.skinType = input.toLowerCase();
+    body.condition = input.toLowerCase();
+  } else {
+    body.text = input;
+  }
+
+  try {
+    const response = await fetch("http://localhost:7000/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    const data = await response.json();
+    result.innerText = data.answer;
+  } catch (err) {
+    result.innerText = "Error connecting to AI";
+  }
+}
+
+function goToResult() {
+  window.location.href = "index2.html";
+}
+</script>
+
+</body>
+</html>
+

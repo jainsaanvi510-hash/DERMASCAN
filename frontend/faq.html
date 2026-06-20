@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FAQ – Dermatologist AI Assistant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .faq-container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .faq-item {
+      background: #fff;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 18px 20px;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffe6ef;
+    }
+
+    .faq-question span {
+      font-size: 22px;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 800px;
+      padding: 20px;
+    }
+
+    .faq-item.active .faq-question span {
+      transform: rotate(45deg);
+    }
+
+    .warning {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <h2>Dermatologist AI</h2>
+    <div>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+  </nav>
+
+  <!-- FAQ SECTION -->
+  <section>
+    <h2 style="color:var(--pink); text-align:center; margin-bottom:30px;">
+      Frequently Asked Questions (FAQ)
+    </h2>
+
+    <div class="faq-container">
+
+      <!-- 1 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          How often should I use the AI Dermatologist?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          AI Dermatologist can recognize up to 62 different skin conditions, making it helpful for regular skin monitoring. The frequency of use depends on the risk level of your skin condition to ensure timely detection of changes.
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          What do the risk levels mean?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          <b>Low-Risk Conditions</b><br>
+          Photodiagnostics should be performed 1–2 times per month. This is sufficient for routine monitoring. A doctor’s visit is recommended for professional reassurance.
+          <br><br>
+          <b>Medium-Risk Conditions</b><br>
+          Photodiagnostics should be done 3–4 times per month. Visiting a dermatologist 1–2 times per month is advised to monitor early changes.
+          <br><br>
+          <b>High-Risk Conditions</b><br>
+          Consult a dermatologist immediately. Photodiagnostics should be performed weekly to closely track the condition.
+          <div class="warning">
+            ⚠️ AI Dermatologist is an auxiliary tool and does not replace professional medical care.
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          Does AI Dermatologist replace a doctor?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          No. AI Dermatologist is not a medical diagnostic device and does not replace a doctor. It helps users become more aware of their skin health so they can seek medical advice early and prepared.
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          Who should use AI Dermatologist?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          Anyone with one or more skin spots can use the app. Users range from people with minor skin concerns to those who want to regularly monitor their skin health. Many users discover risks they were previously unaware of.
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          Is AI Dermatologist safe to use?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          Yes. The app is designed to be safe and informative, but it should only be used as a support tool, not as a replacement for professional medical advice.
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          How accurate is AI Dermatologist?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          The AI provides informative and data-driven insights, but accuracy depends on image quality, lighting, and skin type. Results should always be confirmed by a dermatologist.
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          Can AI Dermatologist detect skin cancer?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          The app can identify patterns that may indicate serious skin conditions, but it cannot confirm skin cancer. High-risk results require immediate medical consultation.
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          Does the app provide treatment or medication?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          No. AI Dermatologist does not prescribe medication or treatment. It provides general guidance and skincare routine suggestions only.
+        </div>
+      </div>
+
+      <!-- 9 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          What type of images should I upload for best results?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          Use clear, well-lit images without filters or makeup. The skin area should be in focus and free from shadows or blur.
+        </div>
+      </div>
+
+      <!-- 10 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          Is my data and skin information safe?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          Yes. User privacy is a priority. Images and data are handled securely and are not shared without user consent.
+        </div>
+      </div>
+
+      <!-- 11 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          Can AI Dermatologist analyze skincare products?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          Yes. The app can analyze ingredients and products, explaining their purpose, safety, and suitability for different skin types.
+        </div>
+      </div>
+
+      <!-- 12 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          What is a personalized skin routine?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          It is a custom skincare plan generated based on your skin type, detected concerns, and general skincare needs.
+        </div>
+      </div>
+
+      <!-- 13 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          Can children or teenagers use AI Dermatologist?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          Yes, but parental guidance is recommended. Any concerning skin changes should be checked by a dermatologist.
+        </div>
+      </div>
+
+      <!-- 14 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          Does the app work for all skin tones?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          The app is designed to support diverse skin tones and types, with ongoing improvements to ensure fairness and accuracy.
+        </div>
+      </div>
+
+      <!-- 15 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          What should I do if my condition worsens?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          If you notice rapid changes, pain, irritation, or bleeding, consult a medical professional immediately.
+        </div>
+      </div>
+
+      <!-- 16 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          Is AI Dermatologist free to use?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          Some features may be free, while advanced features may vary depending on the app version.
+        </div>
+      </div>
+
+      <!-- 17 -->
+      <div class="faq-item">
+        <div class="faq-question">
+          Can I use AI Dermatologist for regular skin check-ups?
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          Yes. The app is ideal for routine skin monitoring and helps users track skin changes over time.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    ⚠️ AI Dermatologist is an auxiliary tool and does not replace professional medical advice.
+  </footer>
+
+  <!-- JS -->
+  <script>
+    document.querySelectorAll(".faq-question").forEach(question => {
+      question.addEventListener("click", () => {
+        question.parentElement.classList.toggle("active");
+      });
+    });
+  </script>
+
+</body>
+</html>

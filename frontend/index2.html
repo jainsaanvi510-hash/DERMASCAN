@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skin Disease Detection</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<style>
+body{
+  background:url("360_F_301347734_BNlV5crnfo0AYkZUXxgOC6t2qFLVLs9N.jpg");
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.ribbon{
+  background:#d63384;
+  color:white;
+  font-weight:700;
+  font-size:1.8rem;
+  padding:12px;
+  border-radius:12px;
+  box-shadow:0 5px 15px rgba(214,51,132,0.4);
+}
+
+.main-card{
+  max-width: 900px;
+  margin:auto;
+  margin-top:20px;
+  background:white;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+.action-btn{
+  border-radius:12px;
+  font-weight:600;
+}
+
+.result-card{
+  margin-top:15px;
+  padding:15px;
+  border-radius:12px;
+  font-size:1.4rem;
+  font-weight:bold;
+  background:#fff0f6;
+  color:#b02568;
+}
+
+.progress-bar{
+  background:#d63384;
+}
+
+.scanning canvas{
+  animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow{
+  from{ box-shadow:0 0 10px #ff99c8; }
+  to{ box-shadow:0 0 25px #d63384; }
+}
+
+.prescription{
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  font-family:'Courier New', monospace;
+  box-shadow:0 5px 20px rgba(0,0,0,0.15);
+}
+</style>
+</head>
+
+<body>
+<div class="main-card text-center">
+
+  <!-- Ribbon -->
+  <div class="ribbon mb-3">
+    SKIN DISEASE DETECTION
+  </div>
+
+  <p class="text-muted">Scan using camera or upload a skin image.</p>
+
+  <!-- Patient -->
+  <input type="text" id="patientName" class="form-control mt-2" placeholder="Enter patient name">
+
+  <!-- Language -->
+  <select id="languageSelect" class="form-select mt-2">
+    <option value="en">English</option>
+    <option value="hi">Hindi</option>
+  </select>
+
+  <!-- Buttons -->
+  <div class="mt-3">
+    <button class="btn btn-primary action-btn" onclick="init()">
+      <i class="bi bi-camera-video"></i> Start Camera
+    </button>
+
+    <button class="btn btn-secondary action-btn" onclick="document.getElementById('imageUpload').click()">
+      <i class="bi bi-upload"></i> Upload
+    </button>
+
+    <button class="btn btn-success action-btn" onclick="showSolution()">
+      <i class="bi bi-file-earmark-medical"></i> Generate Report
+    </button>
+  </div>
+
+  <input type="file" id="imageUpload" hidden accept="image/*">
+
+  <!-- Webcam / image -->
+  <div id="webcam-container" class="mt-3"></div>
+  <img id="uploaded-image" style="max-width:200px; border-radius:12px; margin-top:10px;"/>
+
+  <!-- Result -->
+  <div id="resultCard" class="result-card">
+    Prediction will appear here
+  </div>
+
+  <!-- Confidence -->
+  <div class="progress mt-2" style="height:20px;">
+    <div id="confidenceBar" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%">0%</div>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="solutionModal">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content p-3">
+      <div class="modal-header">
+        <h5 class="modal-title">Report</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="solution-text"></div>
+      <div class="text-end mt-2">
+        <button class="btn btn-primary" onclick="printReport()">Print / Save</button>
+        <button class="btn btn-warning" onclick="shareReport()">Share</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+<script>
+const URL = "https://teachablemachine.withgoogle.com/models/IEzmey7MO/";
+
+let model, webcam, maxPredictions;
+let currentTopClass = "";
+let currentConfidence = 0;
+
+async function init(){
+  const modelURL = URL+"model.json";
+  const metadataURL = URL+"metadata.json";
+
+  model = await tmImage.load(modelURL, metadataURL);
+  maxPredictions = model.getTotalClasses();
+
+  webcam = new tmImage.Webcam(200,200,true);
+  await webcam.setup();
+  await webcam.play();
+  window.requestAnimationFrame(loop);
+
+  const wc = document.getElementById("webcam-container");
+  wc.innerHTML="";
+  wc.appendChild(webcam.canvas);
+  wc.classList.add("scanning");
+}
+
+async function loop(){
+  webcam.update();
+  await predict(webcam.canvas);
+  window.requestAnimationFrame(loop);
+}
+
+async function predict(img){
+  const prediction = await model.predict(img);
+  prediction.sort((a,b)=>b.probability-a.probability);
+
+  currentTopClass = prediction[0].className;
+  currentConfidence = (prediction[0].probability*100).toFixed(1);
+
+  document.getElementById("resultCard").innerText = currentTopClass;
+  const bar = document.getElementById("confidenceBar");
+  bar.style.width=currentConfidence+"%";
+  bar.innerText=currentConfidence+"%";
+}
+
+/* Upload */
+document.getElementById("imageUpload").addEventListener("change", async function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const img = document.getElementById("uploaded-image");
+  img.src = URL.createObjectURL(file);
+  await predict(img);
+});
+
+/* Report */
+function showSolution(){
+  const name = document.getElementById("patientName").value || "Not Provided";
+  const lang = document.getElementById("languageSelect").value;
+
+  let response = "";
+
+  if(lang === "en"){
+
+    if(currentTopClass.toLowerCase().includes("psoriasis")){
+      response = `Psoriasis causes red, itchy, scaly patches on the skin, but it is manageable with the right steps.
+
+See a Doctor First
+Visit a dermatologist for confirmation.
+
+Daily Skin Care
+Moisturize and avoid harsh scrubbing.
+
+Treatment Options
+Use medicines as prescribed.
+
+Lifestyle
+Reduce stress and follow medical advice.`;
+    }
+    else if(currentTopClass.toLowerCase().includes("skin cancer")){
+      response = `See a Doctor Now.
+Early detection makes treatment easier.
+
+Doctors may use surgery or other therapies.
+Regular follow-up is necessary.`;
+    }
+
+    document.getElementById("solution-text").innerHTML = `
+      <div class="prescription">
+        <h4>Dermatology Report</h4>
+        <p><strong>Patient:</strong> ${name}</p>
+        <p><strong>Detected:</strong> ${currentTopClass}</p>
+        <p><strong>Confidence:</strong> ${currentConfidence}%</p>
+        <hr>
+        <p>${response}</p>
+        <hr>
+        <p class="text-end"><em>AI Generated</em></p>
+      </div>
+    `;
+  }
+
+  else{  // HINDI
+
+    if(currentTopClass.toLowerCase().includes("psoriasis")){
+      response = `सोरायसिस त्वचा पर लाल, खुजलीदार पपड़ी बनाता है, पर सही इलाज से इसे नियंत्रित किया जा सकता है।
+
+पहले डॉक्टर को दिखाएँ
+त्वचा विशेषज्ञ से जांच कराएँ।
+
+दैनिक देखभाल
+मॉइस्चराइज़र लगाएँ, रगड़ें नहीं।
+
+उपचार
+डॉक्टर की दवा नियमित लें।
+
+जीवनशैली
+तनाव कम करें और सलाह मानें।`;
+    }
+    else if(currentTopClass.toLowerCase().includes("skin cancer")){
+      response = `तुरंत डॉक्टर से मिलें।
+जल्दी पहचान होने पर इलाज आसान होता है।
+
+सर्जरी या अन्य चिकित्सा की आवश्यकता हो सकती है।
+नियमित जांच ज़रूरी है।`;
+    }
+
+    document.getElementById("solution-text").innerHTML = `
+      <div class="prescription">
+        <h4>त्वचा रिपोर्ट</h4>
+        <p><strong>मरीज़:</strong> ${name}</p>
+        <p><strong>पता चला रोग:</strong> ${currentTopClass}</p>
+        <p><strong>विश्वास स्तर:</strong> ${currentConfidence}%</p>
+        <hr>
+        <p>${response}</p>
+        <hr>
+        <p class="text-end"><em>AI द्वारा तैयार</em></p>
+      </div>
+    `;
+  }
+
+  new bootstrap.Modal(document.getElementById("solutionModal")).show();
+}
+
+/* Print */
+function printReport(){
+  const content = document.getElementById("solution-text").innerHTML;
+  const win = window.open('');
+  win.document.write(content);
+  win.print();
+}
+
+/* Share */
+function shareReport(){
+  const text = document.getElementById("solution-text").innerText;
+  navigator.clipboard.writeText(text).then(()=>{
+    alert("Report copied!");
+  });
+}
+</script>
+
+</body>
+</html>
